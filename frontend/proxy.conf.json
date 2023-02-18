@@ -1,0 +1,17 @@
+{
+  "/sanctum": {
+    "target": "http://localhost",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/login": {
+    "target": "http://localhost",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/api": {
+    "target": "http://localhost",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

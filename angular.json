@@ -12,7 +12,7 @@
       },
       "root": "frontend/projects/auth",
       "sourceRoot": "frontend/projects/auth/src",
-      "prefix": "app",
+      "prefix": "auth",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -63,6 +63,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
+          // "options": {"proxyConfig": "frontend/proxy.conf.json"},
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {

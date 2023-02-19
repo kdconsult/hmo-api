@@ -26,6 +26,7 @@ services:
             - selenium
             - redis
             - mailpit
+            - backend
     pgsql:
         image: 'postgres:12'
         ports:
@@ -83,42 +84,39 @@ services:
             - sail
     graphql-engine:
         container_name: hmo_api_hasura
-        image: hasura/graphql-engine:latest
+        image: 'hasura/graphql-engine:latest'
         ports:
-        - "8080:8080"
+            - '8080:8080'
         networks:
-        - "sail"
+            - sail
         depends_on:
-        - "pgsql"
+            - pgsql
         restart: unless-stopped
         environment:
-            HASURA_GRAPHQL_DATABASE_URL: ${HASURA_GRAPHQL_DATABASE_URL}
-            HASURA_GRAPHQL_METADATA_DATABASE_URL: ${HASURA_GRAPHQL_DATABASE_URL}
-            PG_DATABASE_URL: ${HASURA_GRAPHQL_DATABASE_URL}
+            HASURA_GRAPHQL_DATABASE_URL: '${HASURA_GRAPHQL_DATABASE_URL}'
+            HASURA_GRAPHQL_METADATA_DATABASE_URL: '${HASURA_GRAPHQL_DATABASE_URL}'
+            PG_DATABASE_URL: '${HASURA_GRAPHQL_DATABASE_URL}'
             HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
-            HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
-            ## enable debugging mode. It is recommended to disable this in production
-            HASURA_GRAPHQL_DEV_MODE: "true"
-            HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+            HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
+            HASURA_GRAPHQL_DEV_MODE: 'true'
+            HASURA_GRAPHQL_ENABLED_LOG_TYPES: 'startup, http-log, webhook-log, websocket-log, query-log'
             HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
             HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
             HASURA_GRAPHQL_JWT_SECRET: '{ "type":"HS256", "key": "${TOKEN_SECRET}" }'
             TZ: Europe/Sofia
-            # BACKEND_URL: http://backend:9000
-            BACKEND_URL: http://host.docker.internal:9000/api
-            # HASURA_GRAPHQL_ENABLED_APIS: "graphql,metadata"
+            BACKEND_URL: 'http://host.docker.internal:9000/api'
     backend:
         container_name: hmo_api_backend
-        image: bogui/invoicer-backend:latest-dev
+        image: 'bogui/invoicer-backend:latest-dev'
         networks:
-            - "sail"
+            - sail
         environment:
-            TOKEN_SECRET: "${TOKEN_SECRET}"
-            INVOICE_SECRET: "${INVOICE_SECRET}"
+            TOKEN_SECRET: '${TOKEN_SECRET}'
+            INVOICE_SECRET: '${INVOICE_SECRET}'
             PORT: 9000
             HOST: backend
-            HASURA_URL: "${HASURA_URL}"
-            HASURA_ADMIN_PASSWORD: 'myadminsecretkey'
+            HASURA_URL: '${HASURA_URL}'
+            HASURA_ADMIN_PASSWORD: myadminsecretkey
             MAIL_HOST: invoicer_mailhog
             MAIL_PORT: 1025
             MAIL_USER: postmaster@test.onextlevel.com
@@ -127,27 +125,24 @@ services:
             FRONTEND_URL: 'http://localhost:9000'
             DOWNLOAD_INVOICE_URL: '${DOWNLOAD_INVOICE_URL}'
             DOWNLOAD_INVOICE_QUERY_PARAM: '?h='
-            DO_NOT_REPLAY_EMAIL: 'no-replay@hmo-demo.hyper-m.online'
-            DOMAIN_URL: 'hmo-demo.hyper-m.online'
+            DO_NOT_REPLAY_EMAIL: no-replay@hmo-demo.hyper-m.online
+            DOMAIN_URL: hmo-demo.hyper-m.online
             DOMAIN: localhost
             APP_NAME: 'Hyper M Dev'
-            LOGIN_PATH: '/auth/login'
+            LOGIN_PATH: /auth/login
             DEMO: '1'
-            # Database connection
-            PGUSER: ${DB_USERNAME}
+            PGUSER: '${DB_USERNAME}'
             PGHOST: pgsql
-            PGPASSWORD: ${DB_PASSWORD}
-            PGDATABASE: ${DB_DATABASE}
-            EURO_CONV: ${EURO_CONV}
-        volumes:
-            - '${BACKEND_VOLUME_PATH}:/public'
+            PGPASSWORD: '${DB_PASSWORD}'
+            PGDATABASE: '${DB_DATABASE}'
+            EURO_CONV: '${EURO_CONV}'
+        # volumes:
+        #     - '${BACKEND_VOLUME_PATH}:/public'
         ports:
             - '9000:9000'
 networks:
     sail:
         driver: bridge
 volumes:
-    # sail-pgsql:
-    #     driver: local
     sail-redis:
         driver: local

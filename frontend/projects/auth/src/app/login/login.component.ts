@@ -29,7 +29,9 @@ export class LoginComponent {
     this.loginService
       .login(this.loginForm.value.email, this.loginForm.value.password)
       .subscribe((res) => {
-        this.router.navigate(['confirm-email']);
+        if (res) {
+          this.router.navigate(['dashboard']);
+        }
       });
   }
 

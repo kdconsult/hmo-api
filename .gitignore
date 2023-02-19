@@ -18,3 +18,5 @@ yarn-error.log
 /.idea
 /.vscode
 /.angular/cache
+install-laravel.sh
+public/auth

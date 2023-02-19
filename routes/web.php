@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::fallback( function () {
+    return view('auth');
+});
+
+
 Route::get('/', function () {
     return ['Laravel' => app()->version()];
 });

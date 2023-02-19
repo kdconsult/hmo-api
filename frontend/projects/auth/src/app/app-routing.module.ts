@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AuthGuard } from './guards/auth.guard';
+import { LoginGuard } from './guards/login.guard';
 import { FullWidthComponent } from './layouts/full-width/full-width.component';
 // import { ConfirmEmailComponent } from './confirm-email/confirm-email.component';
 // import { RegistrationGuard } from './guards/registration.guard';
@@ -12,7 +15,7 @@ const routes: Routes = [
     path: '',
     component: FullWidthComponent,
     children: [
-      { path: 'login', component: LoginComponent },
+      { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
       //   {
       //     path: 'register',
       //     component: RegisterComponent,
@@ -20,6 +23,11 @@ const routes: Routes = [
       //   },
       //   { path: 'confirm-email', component: ConfirmEmailComponent },
       //   { path: 'reset-password', component: HandleResetPasswordComponent },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        canActivate: [AuthGuard],
+      },
       { path: '**', redirectTo: 'login', pathMatch: 'full' },
     ],
   },

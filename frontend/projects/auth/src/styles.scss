@@ -1,3 +1,48 @@
+@use "@angular/material" as mat;
+@use "./variables" as v;
+@include mat.core();
+
+$primary: mat.define-palette(v.$kdc-primary-palette, 900);
+$accent: mat.define-palette(v.$kdc-secondary-palette, 200);
+
+$warn: mat.define-palette(mat.$red-palette, 400);
+$blah: mat.define-typography-config();
+
+$theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
+    typography: $blah,
+    density: -1,
+  )
+);
+
+$button-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
+    typography: $blah,
+    density: 0,
+  )
+);
+
+@include mat.all-component-themes($theme);
+@include mat.button-density($button-theme);
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
@@ -7,8 +6,8 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { map, Observable, tap } from 'rxjs';
-import { LoginService } from '../login/login.service';
+import { Observable, tap } from 'rxjs';
+import { LoginService } from '@auth/services/login.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +17,8 @@ export class AuthGuard implements CanActivate {
   private router: Router = inject(Router);
 
   canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    _route: ActivatedRouteSnapshot,
+    _state: RouterStateSnapshot
   ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>

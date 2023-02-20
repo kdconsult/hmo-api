@@ -4,20 +4,23 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { FullWidthModule } from './layouts/full-width/full-width.module';
-import { LoginService } from './login/login.service';
+import { LoginService } from './services/login.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, FullWidthModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FullWidthModule,
+    BrowserAnimationsModule,
+  ],
   providers: [
     {
       provide: APP_INITIALIZER,
       useFactory: (ls: LoginService) => {
         return () => {
           return ls.checkUser();
-          console.log(ls.user.getValue());
-
-          return ls.user.asObservable();
         };
       },
       multi: true,

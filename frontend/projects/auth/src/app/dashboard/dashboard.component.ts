@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { LoginService } from '../login/login.service';
+import { LoginService } from '@auth/services/login.service';
 
 @Component({
   selector: 'auth-dashboard',

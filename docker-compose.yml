@@ -1,24 +1,24 @@
-version: '3'
+version: "3"
 services:
     laravel.test:
         build:
             context: ./vendor/laravel/sail/runtimes/8.2
             dockerfile: Dockerfile
             args:
-                WWWGROUP: '${WWWGROUP}'
+                WWWGROUP: "${WWWGROUP}"
         image: sail-8.2/app
         extra_hosts:
-            - 'host.docker.internal:host-gateway'
+            - "host.docker.internal:host-gateway"
         ports:
-            - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+            - "${APP_PORT:-80}:80"
+            # - "${VITE_PORT:-5173}:${VITE_PORT:-5173}"
         environment:
-            WWWUSER: '${WWWUSER}'
+            WWWUSER: "${WWWUSER}"
             LARAVEL_SAIL: 1
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+            XDEBUG_MODE: "${SAIL_XDEBUG_MODE:-off}"
+            XDEBUG_CONFIG: "${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}"
         volumes:
-            - '.:/var/www/html'
+            - ".:/var/www/html"
         networks:
             - sail
         depends_on:
@@ -27,45 +27,46 @@ services:
             - redis
             - mailpit
             - backend
+            - graphql-engine
     pgsql:
-        image: 'postgres:12'
+        image: "postgres:12"
         ports:
-            - '${FORWARD_DB_PORT:-5432}:5432'
+            - "${FORWARD_DB_PORT:-5432}:5432"
         environment:
-            PGPASSWORD: '${DB_PASSWORD:-secret}'
-            POSTGRES_DB: '${DB_DATABASE}'
-            POSTGRES_USER: '${DB_USERNAME}'
-            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+            PGPASSWORD: "${DB_PASSWORD:-secret}"
+            POSTGRES_DB: "${DB_DATABASE}"
+            POSTGRES_USER: "${DB_USERNAME}"
+            POSTGRES_PASSWORD: "${DB_PASSWORD:-secret}"
         volumes:
-            - '${POSTGRESQL_VOLUME_PATH}:/var/lib/postgresql/data'
-            - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+            - "${POSTGRESQL_VOLUME_PATH}:/var/lib/postgresql/data"
+            - "./vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql"
         networks:
             - sail
         healthcheck:
             test:
                 - CMD
                 - pg_isready
-                - '-q'
-                - '-d'
-                - '${DB_DATABASE}'
-                - '-U'
-                - '${DB_USERNAME}'
+                - "-q"
+                - "-d"
+                - "${DB_DATABASE}"
+                - "-U"
+                - "${DB_USERNAME}"
             retries: 3
             timeout: 5s
     selenium:
         image: selenium/standalone-chrome
         extra_hosts:
-            - 'host.docker.internal:host-gateway'
+            - "host.docker.internal:host-gateway"
         volumes:
-            - '/dev/shm:/dev/shm'
+            - "/dev/shm:/dev/shm"
         networks:
             - sail
     redis:
-        image: 'redis:alpine'
+        image: "redis:alpine"
         ports:
-            - '${FORWARD_REDIS_PORT:-6379}:6379'
+            - "${FORWARD_REDIS_PORT:-6379}:6379"
         volumes:
-            - 'sail-redis:/data'
+            - "sail-redis:/data"
         networks:
             - sail
         healthcheck:
@@ -76,70 +77,68 @@ services:
             retries: 3
             timeout: 5s
     mailpit:
-        image: 'axllent/mailpit:latest'
+        image: "axllent/mailpit:latest"
         ports:
-            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
-            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
+            - "${FORWARD_MAILPIT_PORT:-1025}:1025"
+            - "${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025"
         networks:
             - sail
     graphql-engine:
         container_name: hmo_api_hasura
-        image: 'hasura/graphql-engine:latest'
+        image: "hasura/graphql-engine:latest"
         ports:
-            - '8080:8080'
+            - "8080:8080"
         networks:
             - sail
         depends_on:
             - pgsql
         restart: unless-stopped
         environment:
-            HASURA_GRAPHQL_DATABASE_URL: '${HASURA_GRAPHQL_DATABASE_URL}'
-            HASURA_GRAPHQL_METADATA_DATABASE_URL: '${HASURA_GRAPHQL_DATABASE_URL}'
-            PG_DATABASE_URL: '${HASURA_GRAPHQL_DATABASE_URL}'
+            HASURA_GRAPHQL_DATABASE_URL: "${HASURA_GRAPHQL_DATABASE_URL}"
+            HASURA_GRAPHQL_METADATA_DATABASE_URL: "${HASURA_GRAPHQL_DATABASE_URL}"
+            PG_DATABASE_URL: "${HASURA_GRAPHQL_DATABASE_URL}"
             HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
-            HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
-            HASURA_GRAPHQL_DEV_MODE: 'true'
-            HASURA_GRAPHQL_ENABLED_LOG_TYPES: 'startup, http-log, webhook-log, websocket-log, query-log'
+            HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+            HASURA_GRAPHQL_DEV_MODE: "true"
+            HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
             HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
             HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
             HASURA_GRAPHQL_JWT_SECRET: '{ "type":"HS256", "key": "${TOKEN_SECRET}" }'
             TZ: Europe/Sofia
-            BACKEND_URL: 'http://host.docker.internal:9000/api'
+            BACKEND_URL: "http://host.docker.internal:9000/api"
     backend:
         container_name: hmo_api_backend
-        image: 'bogui/invoicer-backend:latest-dev'
+        image: "bogui/invoicer-backend:latest-dev"
         networks:
             - sail
         environment:
-            TOKEN_SECRET: '${TOKEN_SECRET}'
-            INVOICE_SECRET: '${INVOICE_SECRET}'
+            TOKEN_SECRET: "${TOKEN_SECRET}"
+            INVOICE_SECRET: "${INVOICE_SECRET}"
             PORT: 9000
             HOST: backend
-            HASURA_URL: '${HASURA_URL}'
+            HASURA_URL: "${HASURA_URL}"
             HASURA_ADMIN_PASSWORD: myadminsecretkey
             MAIL_HOST: invoicer_mailhog
             MAIL_PORT: 1025
             MAIL_USER: postmaster@test.onextlevel.com
             MAIL_PASS: 68194615f6267142f0ae12b5aee7af6b-90346a2d-3ec2a823
-            SITE_URL: 'http://localhost:9000'
-            FRONTEND_URL: 'http://localhost:9000'
-            DOWNLOAD_INVOICE_URL: '${DOWNLOAD_INVOICE_URL}'
-            DOWNLOAD_INVOICE_QUERY_PARAM: '?h='
+            SITE_URL: "http://localhost:9000"
+            FRONTEND_URL: "http://localhost:9000"
+            DOWNLOAD_INVOICE_URL: "${DOWNLOAD_INVOICE_URL}"
+            DOWNLOAD_INVOICE_QUERY_PARAM: "?h="
             DO_NOT_REPLAY_EMAIL: no-replay@hmo-demo.hyper-m.online
             DOMAIN_URL: hmo-demo.hyper-m.online
             DOMAIN: localhost
-            APP_NAME: 'Hyper M Dev'
+            APP_NAME: "Hyper M Dev"
             LOGIN_PATH: /auth/login
-            DEMO: '1'
-            PGUSER: '${DB_USERNAME}'
+            DEMO: "1"
+            PGUSER: "${DB_USERNAME}"
             PGHOST: pgsql
-            PGPASSWORD: '${DB_PASSWORD}'
-            PGDATABASE: '${DB_DATABASE}'
-            EURO_CONV: '${EURO_CONV}'
-        # volumes:
-        #     - '${BACKEND_VOLUME_PATH}:/public'
+            PGPASSWORD: "${DB_PASSWORD}"
+            PGDATABASE: "${DB_DATABASE}"
+            EURO_CONV: "${EURO_CONV}"
         ports:
-            - '9000:9000'
+            - "9000:9000"
 networks:
     sail:
         driver: bridge

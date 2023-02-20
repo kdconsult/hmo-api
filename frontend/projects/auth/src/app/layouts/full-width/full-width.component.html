@@ -1,3 +1,26 @@
-<div class="w-screen h-screen bg-slate-100 flex justify-center items-center">
-    <router-outlet></router-outlet>
+<div class="z-10">
+  <mat-toolbar class="nav-bar" color="primary">
+    <div class="flex justify-center w-full">
+      <h1 class="px-4">{{ appName }}</h1>
+    </div>
+  </mat-toolbar>
+  <div
+    class="bg-light-gray min-h-screen -mt-16 h-full flex justify-center items-center"
+  >
+    <div>
+      <router-outlet></router-outlet>
+      <mat-card class="mt-16 bg-kdc-primary-900">
+        <div class="flex justify-between text-kdc-accent-300 p-4">
+          <p class="!m-0">
+            Версия
+
+            <span>{{ appVersion }}</span>
+          </p>
+          <p class="!m-0">
+            Ревизия <span>{{ appRevision }}</span>
+          </p>
+        </div>
+      </mat-card>
+    </div>
+  </div>
 </div>

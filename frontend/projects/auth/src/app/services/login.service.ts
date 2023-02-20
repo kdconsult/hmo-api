@@ -41,8 +41,7 @@ export class LoginService {
    */
   public checkUser() {
     return this.http.get('http://localhost/api/user').pipe(
-      map((res) => {
-        console.log(res);
+      map((_res) => {
         return true;
       }),
       catchError((err) => {

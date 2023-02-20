@@ -6,8 +6,8 @@ import { RouterModule } from '@angular/router';
 // import { RegisterComponent } from '../../register/register.component';
 // import { ConfirmEmailComponent } from '../../confirm-email/confirm-email.component';
 import { FullWidthComponent } from './full-width.component';
-// import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
-// import { environment } from '../../../environments/environment';
+import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { environment } from '../../../environments/environment';
 // import { MaterialModule } from '../../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -33,14 +33,14 @@ import { LoginModule } from '../../login/login.module';
     MatToolbarModule,
     MatCardModule,
     LoginModule,
-    // RecaptchaV3Module,
+    RecaptchaV3Module,
   ],
   providers: [
     // AuthService,
-    // {
-    //   provide: RECAPTCHA_V3_SITE_KEY,
-    //   useValue: environment.RECAPTCHA_V3_SITE_KEY,
-    // },
+    {
+      provide: RECAPTCHA_V3_SITE_KEY,
+      useValue: environment.RECAPTCHA_V3_SITE_KEY,
+    },
   ],
 })
 export class FullWidthModule {}

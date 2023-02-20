@@ -67,4 +67,11 @@ export class LoginService {
       console.log(res);
     });
   }
+
+  /**
+   * sendPassswordResetEmail
+   */
+  public sendPassswordResetEmail(email: string): Observable<any> {
+    return of(true);
+  }
 }

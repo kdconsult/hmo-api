@@ -21,6 +21,7 @@
     "useDefineForClassFields": false,
     "lib": ["ES2022", "dom"],
     "paths": {
+      "@auth/*": ["projects/auth/src/app/*"],
       "@auth/services/*": ["projects/auth/src/app/services/*"]
     }
   },

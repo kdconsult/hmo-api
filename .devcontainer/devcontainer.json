@@ -8,7 +8,9 @@
         "vscode": {
             "extensions": [
                 "mikestead.dotenv",
+                "bmewburn.vscode-intelephense-client",
                 "amiralizadeh9480.laravel-extra-intellisense",
+                "Vue.volar",
                 "ryannaddy.laravel-artisan",
                 "Angular.ng-template",
                 "GitHub.copilot",

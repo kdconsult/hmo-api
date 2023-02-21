@@ -26,7 +26,7 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
         //     return hash_equals($instance->token, hash('sha256', $token)) ? $instance : null;
         // }
         try {
-            if (Token::validate($token, '^J7W-^a={C%=')) {
+            if (Token::validate($token, env('JWT_SECRET'))) {
                 return static::where('token', $token)->first();
             }
             throw new \Exception('Token is not valid');

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasApiTokens;
+use App\Traits\HasTranslations;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +12,9 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuids;
+    use HasApiTokens, HasTranslations, HasFactory, Notifiable, HasUuids;
+
+    public $translatable = ['name'];
 
     /**
      * The attributes that are mass assignable.

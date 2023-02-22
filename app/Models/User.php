@@ -7,12 +7,13 @@ use App\Traits\HasTranslations;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasTranslations, HasFactory, Notifiable, HasUuids;
+    use HasApiTokens, HasTranslations, HasFactory, HasUuids, Notifiable, SoftDeletes;
 
     public $translatable = ['name'];
 
@@ -46,8 +47,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function company()
-    {
-        return $this->belongsTo(Company::class, 'companyId');
-    }
+    // public function company()
+    // {
+    //     return $this->belongsTo(Company::class, 'companyId');
+    // }
 }

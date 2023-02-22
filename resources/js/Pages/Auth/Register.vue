@@ -7,7 +7,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
-    name: '',
+    name: { bg: '', en: '' },
     email: '',
     password: '',
     password_confirmation: '',
@@ -33,7 +33,7 @@ const submit = () => {
                     id="name"
                     type="text"
                     class="mt-1 block w-full"
-                    v-model="form.name"
+                    v-model="form.name.bg"
                     required
                     autofocus
                     autocomplete="name"

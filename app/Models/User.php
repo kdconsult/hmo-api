@@ -47,6 +47,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+
+    public function hasCompany(): bool
+    {
+        return array_key_exists('company_id', $this->attributes) && $this->attributes['company_id'] !== null;
+    }
+
     // public function company()
     // {
     //     return $this->belongsTo(Company::class, 'companyId');

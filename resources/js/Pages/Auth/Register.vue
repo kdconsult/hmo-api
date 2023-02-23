@@ -30,6 +30,7 @@ const submit = () => {
                 <InputLabel for="name" value="Name" />
 
                 <TextInput
+                    dusk="name"
                     id="name"
                     type="text"
                     class="mt-1 block w-full"
@@ -46,6 +47,7 @@ const submit = () => {
                 <InputLabel for="email" value="Email" />
 
                 <TextInput
+                dusk="email"
                     id="email"
                     type="email"
                     class="mt-1 block w-full"
@@ -61,6 +63,7 @@ const submit = () => {
                 <InputLabel for="password" value="Password" />
 
                 <TextInput
+                dusk="password"
                     id="password"
                     type="password"
                     class="mt-1 block w-full"
@@ -76,6 +79,7 @@ const submit = () => {
                 <InputLabel for="password_confirmation" value="Confirm Password" />
 
                 <TextInput
+                dusk="password_confirmation"
                     id="password_confirmation"
                     type="password"
                     class="mt-1 block w-full"
@@ -95,7 +99,7 @@ const submit = () => {
                     Already registered?
                 </Link>
 
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" dusk="register-button">
                     Register
                 </PrimaryButton>
             </div>

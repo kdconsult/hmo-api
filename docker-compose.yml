@@ -2,7 +2,7 @@ version: "3"
 services:
     laravel.test:
         build:
-            context: ./vendor/laravel/sail/runtimes/8.2
+            context: ./docker/8.2
             dockerfile: Dockerfile
             args:
                 WWWGROUP: "${WWWGROUP}"
@@ -101,11 +101,11 @@ services:
             HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
             HASURA_GRAPHQL_DEV_MODE: "true"
             HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log, query-log"
-            HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
-            HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
-            HASURA_GRAPHQL_JWT_SECRET: '{ "type":"HS256", "key": "${TOKEN_SECRET}" }'
+            HASURA_GRAPHQL_ADMIN_SECRET: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+            HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "${HASURA_GRAPHQL_UNAUTHORIZED_ROLE}"
+            HASURA_GRAPHQL_JWT_SECRET: '{ "type":"HS256", "key": "${JWT_SECRET}" }'
             TZ: Europe/Sofia
-            BACKEND_URL: "http://host.docker.internal:9000/api"
+            BACKEND_URL: "${BACKEND_URL}"
     backend:
         container_name: hmo_api_backend
         image: "bogui/invoicer-backend:latest-dev"
@@ -117,13 +117,13 @@ services:
             PORT: 9000
             HOST: backend
             HASURA_URL: "${HASURA_URL}"
-            HASURA_ADMIN_PASSWORD: myadminsecretkey
-            MAIL_HOST: invoicer_mailhog
+            HASURA_ADMIN_PASSWORD: "${HASURA_GRAPHQL_ADMIN_SECRET}"
+            MAIL_HOST: mailpit
             MAIL_PORT: 1025
-            MAIL_USER: postmaster@test.onextlevel.com
-            MAIL_PASS: 68194615f6267142f0ae12b5aee7af6b-90346a2d-3ec2a823
-            SITE_URL: "http://localhost:9000"
-            FRONTEND_URL: "http://localhost:9000"
+            MAIL_USER: "${MAIL_USER}}"
+            MAIL_PASS: "${MAIL_PASS}"
+            SITE_URL: "${SITE_URL}}"
+            FRONTEND_URL: "${FRONTEND_URL}"
             DOWNLOAD_INVOICE_URL: "${DOWNLOAD_INVOICE_URL}"
             DOWNLOAD_INVOICE_QUERY_PARAM: "?h="
             DO_NOT_REPLAY_EMAIL: no-replay@hmo-demo.hyper-m.online

@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use DateTimeInterface;
+use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\HasApiTokens as BaseApiTokens;
 use Laravel\Sanctum\NewAccessToken;
 use ReallySimpleJWT\Token;
@@ -16,29 +17,30 @@ trait HasApiTokens
      *
      * @return \Laravel\Sanctum\NewAccessToken
      */
-    public function createToken(string $name, array $abilities = ['*'], DateTimeInterface $expiresAt = null)
+    public function createToken(string $name, array $abilities = ['*'], DateTimeInterface $expiresAt = null, $store = true)
     {
         $id = $this->getKey();
         $customClaims = [
             'active' => $this->active,
             'x-hasura-allowed-roles' => [$this->role],
-            'x-hasura-company-id' => $this->companyId,
+            'x-hasura-company-id' => $this->company_id,
             'x-hasura-default-role' => $this->role,
             'x-hasura-user-id' => $id,
             'x-hasura-locale' => 'bg', // @todo make it dynamic
         ];
 
         $customClaims[$this->role] = true;
+
         $payload = [
             'admin' => $this->role === 'admin',
             'aud' => env('SITE_URL'),
             'auth_time' => time(),
             'email' => $this->email,
-            'exp' => $expiresAt,
+            'exp' => $expiresAt->timestamp,
             'https://hasura.io/jwt/claims' => $customClaims,
             'iat' => time(),
             'iss' => 'self',
-            'name' => "{$this->firstName} {($this->middleName ? substr($this->middleName, 0, 1).'.' : '')} {$this->lastName}",
+            'name' => "{$this->firstName} {$this->lastName}",
             'sub' => $id,
             'user_id' => $id,
             'companyType' => $this->company->type,
@@ -46,8 +48,12 @@ trait HasApiTokens
         ];
 
         $secret = env('JWT_SECRET');
-
+        
         $plainTextToken = Token::customPayload($payload, $secret);
+
+        if (!$store) {
+            return $plainTextToken;
+        }
 
         $token = $this->tokens()->create([
             'name' => $name,

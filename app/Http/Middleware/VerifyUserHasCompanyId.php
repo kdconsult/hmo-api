@@ -15,10 +15,16 @@ class VerifyUserHasCompanyId
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()->hasCompany() || $request->path() === 'create-company') {
+        $allowed_urls = ['dashboard', 'companies/create'];
+        if ($request->user()->hasCompany()) {
             return $next($request);
         }
-
-        return redirect()->route('create-company');
+        
+        if (in_array($request->path(), $allowed_urls)) {
+            return $next($request);
+        }
+        
+        session()->flash('error', 'You need to create a company first!');
+        return redirect()->route('dashboard');
     }
 }

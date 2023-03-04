@@ -33,7 +33,6 @@ class ProfileUpdateRequest extends FormRequest
 
     public function messages()
     {
-
         return [
             'name.bg.required' => 'Името е задължително',
         ];

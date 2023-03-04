@@ -7,18 +7,20 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
-use Inertia\Response;
+use Inertia\Response as InertiaResponse;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Display the login view.
      */
-    public function create(): Response
+    public function create(): InertiaResponse
     {
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
@@ -44,6 +46,14 @@ class AuthenticatedSessionController extends Controller
         throw ValidationException::withMessages([
             'email' => trans('auth.failed'),
         ]);
+    }
+
+    public function refreshToken(Request $request): Response {
+        $token = $request->user()->createToken('refresh_token', ['*'], now('Europe/Sofia')->addHours(3), false);
+Log::alert($token);
+        
+        return response(['token' => $token]);
+
     }
 
     /**

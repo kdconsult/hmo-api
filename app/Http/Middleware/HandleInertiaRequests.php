@@ -35,7 +35,8 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'trans' => function () use ($request) {
-                $trans = trans($request->path());
+                $trans = trans($request->route()->getName());
+
                 return is_array($trans) ? $trans : [];
             },
             'ziggy' => function () use ($request) {

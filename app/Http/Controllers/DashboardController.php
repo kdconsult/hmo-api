@@ -10,19 +10,20 @@ class DashboardController extends Controller
     /**
      * Index Method
      *
-     * Shows the dashboard if has company 
+     * Shows the dashboard if has company
      *
-     * @return \Inertia\Response
      **/
     public function index(): Response
     {
-        return Inertia::render('Dashboard');
-    }
-
-    public function createCompany()
-    {
-        return Inertia::render('CreateCompany', [
-            'locales' => config('app.allowed_locales')
+        return Inertia::render('Dashboard', [
+            'errors' => session()->has('errors') ? session()->get('errors')->getBag('default')->getMessages() : (object) [__('companies.no_company')],
         ]);
     }
+
+    // public function createCompany()
+    // {
+    //     return Inertia::render('CreateCompany', [
+    //         'locales' => config('app.allowed_locales')
+    //     ]);
+    // }
 }

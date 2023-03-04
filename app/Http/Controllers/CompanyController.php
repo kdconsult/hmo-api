@@ -6,6 +6,8 @@ use App\Models\Company;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class CompanyController extends Controller
 {
@@ -20,9 +22,11 @@ class CompanyController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Response
+    public function create(): InertiaResponse
     {
-        //
+        return Inertia::render('Company/Create', [
+            'locales' => config('app.allowed_locales')
+        ]);
     }
 
     /**

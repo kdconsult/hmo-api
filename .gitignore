@@ -21,3 +21,5 @@ yarn-error.log
 /.angular/cache
 install-laravel.sh
 public/auth
+/frontend/
+/dist/

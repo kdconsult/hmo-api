@@ -2,12 +2,14 @@
 
 namespace App\Models\Sanctum;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 use ReallySimpleJWT\Token;
 
 class PersonalAccessToken extends SanctumPersonalAccessToken
 {
+    use HasFactory;
     /**
      * Find the token instance matching the given token.
      *
@@ -16,6 +18,7 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
      */
     public static function findToken($token)
     {
+        Log::info($token);
         // if (strpos($token, '|') === false) {
         //     return static::where('token', $token)->first();
         // }
@@ -27,7 +30,16 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
         // }
         try {
             if (Token::validate($token, env('JWT_SECRET'))) {
-                return static::where('token', $token)->first();
+
+                $payload = Token::parser($token)->getDecodedPayload();
+                $payload['expires_at'] = \Carbon\Carbon::parse($payload['exp']);
+
+                $collection = static::factory()->make($payload);
+                
+                Log::info($collection);
+
+                return $collection;
+                // return static::where('token', $token)->first();
             }
             throw new \Exception('Token is not valid');
         } catch (\Throwable $th) {

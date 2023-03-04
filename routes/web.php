@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,7 +28,7 @@ Route::get('/vies', function () {
         'countryCode' => 'BG',
         'vatNumber' => '205255868',
         'requesterCountryCode' => 'BG',
-        'requesterVatNumber' => '205255868'
+        'requesterVatNumber' => '205255868',
     ]);
 
     /** Short response without requestIdentifier */
@@ -47,13 +50,16 @@ Route::get('/', function () {
     ]);
 });
 
-
-Route::middleware(['auth', 'verified', 'has-company'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/create-company', [DashboardController::class, 'createCompany'])->name('create-company');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('companies', CompanyController::class);
+    Route::get('/user/silently-refresh', [AuthenticatedSessionController::class, 'refreshToken'])->name('token.refresh');
+    Route::resource('/users', UserController::class)->except(['create', 'store']);    
+    Route::post('/users/check-settings', [UserController::class, 'checkSettings'])->name('users.check-settings');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
